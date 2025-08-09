@@ -761,260 +761,259 @@
         const SUPABASE_URL = 'https://YOUR_SUPABASE_URL'; // Replace with your Supabase URL
         const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-        // Initialize Supabase client for the website
-        let supabaseWeb;
-        try {
-            supabaseWeb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        } catch (error) {
-            console.error('Failed to initialize Supabase:', error);
+        // Initialize Supabase client
+let supabaseWeb;
+try {
+    if (typeof window !== 'undefined' && window.supabase) {
+        supabaseWeb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+} catch (error) {
+    console.error('Failed to initialize Supabase:', error);
+}
+
+// =====================================
+// EMAIL VERIFICATION FUNCTIONS
+// =====================================
+
+// REPLACE your existing checkForEmailVerificationToken function with this:
+function checkForEmailVerificationToken() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fragment = window.location.hash;
+    
+    // Check for Supabase verification tokens
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+    const type = urlParams.get('type');
+    
+    console.log('URL check:', { accessToken: !!accessToken, refreshToken: !!refreshToken, type, fragment });
+    
+    if (type === 'signup' && accessToken && refreshToken) {
+        // This is an email verification link from Supabase
+        showPage('verification');
+        handleEmailVerification(accessToken, refreshToken);
+    } else if (fragment === '#verification' || fragment.startsWith('#verification')) {
+        // Direct navigation to verification page
+        showPage('verification');
+        showManualVerificationForm();
+    }
+}
+
+// ADD this new function to handle automatic email verification:
+async function handleEmailVerification(accessToken, refreshToken) {
+    // Update the verification page content to show processing
+    updateVerificationPageContent(`
+        <div style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
+            <h3 style="margin-bottom: 1rem;">Processing Email Verification...</h3>
+            <p>Please wait while we verify your email address.</p>
+        </div>
+    `);
+
+    try {
+        if (!supabaseWeb) {
+            throw new Error('Supabase not initialized. Please check your configuration.');
         }
 
-        // =====================================
-        // EMAIL VERIFICATION FUNCTIONS
-        // =====================================
-        
-        // Check for email verification tokens in URL when page loads
-        function checkForEmailVerificationToken() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('token');
-            const type = urlParams.get('type');
+        // Set the session with the tokens from the URL
+        const { data, error } = await supabaseWeb.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        if (data.user) {
+            // Update the user's email verification status in your database
+            await updateEmailVerificationStatus(data.user.id);
             
-            if (token && type === 'email') {
-                // Show verification page and auto-verify
-                showPage('verification');
-                autoVerifyEmail(token);
-            }
+            // Show success message
+            updateVerificationPageContent(`
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; color: #4CAF50;">✅</div>
+                    <h3 style="color: #4CAF50; margin-bottom: 1rem;">Email Verified Successfully!</h3>
+                    <p style="margin-bottom: 2rem;">Your email has been verified. You can now sign in to the DieBuddy app with your credentials.</p>
+                    <button onclick="goToApp()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-right: 1rem;">Open DieBuddy App</button>
+                    <button onclick="showPage('home')" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;">Back to Home</button>
+                </div>
+            `);
+            
+            showVerificationStatus('Email verified successfully! You can now sign in to the DieBuddy app.', 'success');
+        } else {
+            throw new Error('No user data received during verification');
         }
 
-        async function autoVerifyEmail(token) {
-            if (!supabaseWeb) {
-                showVerificationStatus('Supabase not configured properly', 'error');
+    } catch (error) {
+        console.error('Email verification error:', error);
+        updateVerificationPageContent(`
+            <div style="text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; color: #f44336;">❌</div>
+                <h3 style="color: #f44336; margin-bottom: 1rem;">Verification Failed</h3>
+                <p style="margin-bottom: 2rem;">There was an issue verifying your email: ${error.message}</p>
+                <button onclick="showManualVerificationForm()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-right: 1rem;">Try Again</button>
+                <button onclick="showPage('contact')" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;">Contact Support</button>
+            </div>
+        `);
+        showVerificationStatus('Email verification failed: ' + error.message, 'error');
+    }
+}
+
+// ADD this helper function to update verification page content:
+function updateVerificationPageContent(htmlContent) {
+    const verificationForm = document.querySelector('.verification-form');
+    if (verificationForm) {
+        verificationForm.innerHTML = htmlContent;
+    }
+}
+
+// ADD this function to update email verification status in database:
+async function updateEmailVerificationStatus(userId) {
+    try {
+        if (!supabaseWeb) return;
+        
+        const { error } = await supabaseWeb
+            .from('players')
+            .update({ email_verified: true })
+            .eq('user_id', userId);
+
+        if (error) {
+            console.error('Error updating email verification status:', error);
+        } else {
+            console.log('Email verification status updated successfully');
+        }
+    } catch (error) {
+        console.error('Error updating verification status:', error);
+    }
+}
+
+// ADD this function to show manual verification form (fallback):
+function showManualVerificationForm() {
+    updateVerificationPageContent(`
+        <h3 style="margin-bottom: 1.5rem;">Manual Verification</h3>
+        <p style="margin-bottom: 2rem; color: #666;">If automatic verification didn't work, you can try the following options:</p>
+        
+        <div style="margin-bottom: 2rem;">
+            <button onclick="resendVerificationEmail()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; width: 100%; margin-bottom: 1rem;">Resend Verification Email</button>
+        </div>
+
+        <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 15px;">
+            <h4 style="color: #b22222; margin-bottom: 1rem;">Need Help?</h4>
+            <ul style="text-align: left; color: #666;">
+                <li>Check your email for the verification link</li>
+                <li>Make sure you clicked the link from the same device</li>
+                <li>Try disabling ad blockers or privacy extensions</li>
+                <li>Clear your browser cache and try again</li>
+                <li>Contact support if the issue persists</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <button onclick="goToApp()" style="background: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-right: 1rem;">Try Opening App</button>
+            <button onclick="showPage('contact')" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;">Contact Support</button>
+        </div>
+    `);
+}
+
+// ADD this function to resend verification email:
+async function resendVerificationEmail() {
+    const email = localStorage.getItem('verification_email') || prompt('Please enter your email address:');
+    
+    if (!email) {
+        showVerificationStatus('Email address is required to resend verification.', 'error');
+        return;
+    }
+
+    try {
+        if (!supabaseWeb) {
+            throw new Error('Supabase not configured');
+        }
+
+        showVerificationStatus('Sending verification email...', 'info');
+
+        const { error } = await supabaseWeb.auth.resend({
+            type: 'signup',
+            email: email,
+            options: {
+                emailRedirectTo: window.location.origin + '/#verification'
+            }
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        showVerificationStatus('Verification email sent! Please check your inbox and spam folder.', 'success');
+        
+        // Store email for future use
+        localStorage.setItem('verification_email', email);
+
+    } catch (error) {
+        console.error('Error resending verification:', error);
+        showVerificationStatus('Failed to resend verification email: ' + error.message, 'error');
+    }
+}
+
+// ADD this function to redirect to app:
+function goToApp() {
+    // You can customize this based on how users access your app
+    alert('Please open the DieBuddy app on your device to sign in with your verified account!');
+    
+    // Optional: If you have deep links or app store links, use them here
+    // window.open('your-app-deep-link-scheme://verify', '_blank');
+}
+
+// UPDATE your existing setupVerificationForm function:
+function setupVerificationForm() {
+    const verificationForm = document.getElementById('verificationForm');
+    if (verificationForm) {
+        verificationForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const code = document.getElementById('verificationCode').value;
+            
+            if (code.length !== 6) {
+                showVerificationStatus('Please enter a 6-digit verification code.', 'error');
                 return;
             }
-
-            showVerificationStatus('Verifying your email...', 'info');
             
-            try {
-                const { data, error } = await supabaseWeb.auth.verifyOtp({
-                    token_hash: token,
-                    type: 'email'
-                });
-                
-                if (error) {
-                    throw error;
-                }
-                
-                if (data.user) {
-                    // Update player record to mark email as verified
-                    try {
-                        await supabaseWeb
-                            .from('players')
-                            .update({ email_verified: true })
-                            .eq('user_id', data.user.id);
-                    } catch (dbError) {
-                        console.log('Database update error (non-critical):', dbError);
-                    }
-                    
-                    showVerificationStatus('Email verified successfully! You can now use the DieBuddy app.', 'success');
-                    
-                    // Show success message and redirect option
+            showVerificationStatus('Verifying your code...', 'info');
+            
+            // Note: This is a fallback manual verification
+            // In a real implementation, you might want to implement OTP verification
+            // For now, we'll keep the demo behavior but suggest using email links
+            setTimeout(() => {
+                if (code === '123456') {
+                    showVerificationStatus('Demo verification successful! (This is for testing only)', 'success');
                     setTimeout(() => {
-                        showSuccessOptions();
+                        showPage('home');
                     }, 2000);
                 } else {
-                    showVerificationStatus('Verification failed. Please try again.', 'error');
+                    showVerificationStatus('Invalid verification code. Please use the verification link sent to your email instead.', 'error');
                 }
-            } catch (error) {
-                console.error('Auto verification error:', error);
-                showVerificationStatus(`Verification failed: ${error.message}`, 'error');
-            }
-        }
-
-        function setupVerificationForm() {
-            const verificationForm = document.getElementById('verificationForm');
-            if (verificationForm) {
-                verificationForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    
-                    if (!supabaseWeb) {
-                        showVerificationStatus('Supabase not configured properly', 'error');
-                        return;
-                    }
-                    
-                    const code = document.getElementById('verificationCode').value;
-                    
-                    if (code.length !== 6) {
-                        showVerificationStatus('Please enter a 6-digit verification code.', 'error');
-                        return;
-                    }
-                    
-                    showVerificationStatus('Verifying your code...', 'info');
-                    
-                    try {
-                        // Note: Direct OTP verification may require additional setup
-                        // For now, we'll simulate the process
-                        if (code === '123456') {
-                            showVerificationStatus('Demo verification successful! (Use actual implementation in production)', 'success');
-                            setTimeout(() => {
-                                showSuccessOptions();
-                            }, 2000);
-                        } else {
-                            showVerificationStatus('Invalid verification code. Please try again or use the email link.', 'error');
-                        }
-                    } catch (error) {
-                        console.error('Verification error:', error);
-                        showVerificationStatus(`Verification failed: ${error.message}`, 'error');
-                    }
-                });
-            }
-        }
-
-        function showSuccessOptions() {
-            const container = document.querySelector('.verification-container');
-            if (container) {
-                container.innerHTML = `
-                    <div class="verification-icon">🎉</div>
-                    <h1 style="color: #28a745; margin-bottom: 1rem;">Email Verified Successfully!</h1>
-                    <p style="font-size: 1.2rem; margin-bottom: 2rem;">Your DieBuddy account is now active and ready to use.</p>
-                    
-                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
-                        <h3 style="color: #b22222; margin-bottom: 1rem;">What's Next?</h3>
-                        <ul style="text-align: left; color: #666; margin-bottom: 1.5rem;">
-                            <li>📱 Open the DieBuddy app on your device</li>
-                            <li>🔑 Sign in with your verified email</li>
-                            <li>🎯 Start tracking your game statistics</li>
-                            <li>👥 Create groups and invite friends</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                        <button onclick="showPage('home')" style="background: #b22222; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
-                            Back to Home
-                        </button>
-                        <button onclick="window.close()" style="background: #6c757d; color: white; padding: 1rem 2rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
-                            Close Window
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        async function resendCode() {
-            if (!supabaseWeb) {
-                showVerificationStatus('Supabase not configured properly', 'error');
-                return;
-            }
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const email = urlParams.get('email') || localStorage.getItem('verification_email');
-            
-            if (!email) {
-                showVerificationStatus('Email address not found. Please try signing up again.', 'error');
-                return;
-            }
-            
-            try {
-                const { error } = await supabaseWeb.auth.resend({
-                    type: 'signup',
-                    email: email,
-                    options: {
-                        emailRedirectTo: `${window.location.origin}/#verification`,
-                    }
-                });
-                
-                if (error) {
-                    throw error;
-                }
-                
-                showVerificationStatus('Verification email resent! Please check your inbox.', 'info');
-            } catch (error) {
-                console.error('Resend error:', error);
-                showVerificationStatus(`Failed to resend email: ${error.message}`, 'error');
-            }
-        }
-
-        // Enhanced verification status function
-        function showVerificationStatus(message, type) {
-            const statusDiv = document.getElementById('verificationStatus');
-            if (!statusDiv) return;
-            
-            statusDiv.style.display = 'block';
-            statusDiv.textContent = message;
-            
-            // Reset classes
-            statusDiv.classList.remove('success', 'error', 'info');
-            
-            // Add appropriate class and styling
-            if (type === 'success') {
-                statusDiv.style.background = '#d4edda';
-                statusDiv.style.color = '#155724';
-                statusDiv.style.border = '1px solid #c3e6cb';
-                statusDiv.innerHTML = `<div style="display: flex; align-items: center; justify-content: center;"><span style="margin-right: 8px;">✅</span>${message}</div>`;
-            } else if (type === 'error') {
-                statusDiv.style.background = '#f8d7da';
-                statusDiv.style.color = '#721c24';
-                statusDiv.style.border = '1px solid #f5c6cb';
-                statusDiv.innerHTML = `<div style="display: flex; align-items: center; justify-content: center;"><span style="margin-right: 8px;">❌</span>${message}</div>`;
-            } else {
-                statusDiv.style.background = '#d1ecf1';
-                statusDiv.style.color = '#0c5460';
-                statusDiv.style.border = '1px solid #bee5eb';
-                statusDiv.innerHTML = `<div style="display: flex; align-items: center; justify-content: center;"><span style="margin-right: 8px;">ℹ️</span>${message}</div>`;
-            }
-        }
-
-        // Store email for verification if passed as parameter
-        function storeVerificationEmail() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const email = urlParams.get('email');
-            if (email) {
-                localStorage.setItem('verification_email', email);
-            }
-        }
-
-        // =====================================
-        // NAVIGATION AND GENERAL FUNCTIONS
-        // =====================================
-        // Navigation functionality
-        function showPage(pageId) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-            
-            // Show selected page
-            document.getElementById(pageId).classList.add('active');
-            
-            // Update URL without page reload
-            window.history.pushState({page: pageId}, '', `#${pageId}`);
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        }
-
-        // Handle browser back/forward buttons
-        window.addEventListener('popstate', function(event) {
-            if (event.state && event.state.page) {
-                showPage(event.state.page);
-            } else {
-                // Default to home page
-                showPage('home');
-            }
+            }, 2000);
         });
+    }
+}
 
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Store email if provided in URL
-            storeVerificationEmail();
-            
-            // Check for email verification tokens in URL
-            checkForEmailVerificationToken();
-            
-            // Set up the verification form
-            setupVerificationForm();
-            
-            // Add other interactive features
-            initializeInteractiveFeatures();
-        });
+// =====================================
+// INITIALIZATION UPDATES
+// =====================================
+
+// UPDATE your existing DOMContentLoaded event listener to include the new function:
+document.addEventListener('DOMContentLoaded', function() {
+    // Store email if provided in URL
+    storeVerificationEmail();
+    
+    // Check for email verification tokens in URL (UPDATED)
+    checkForEmailVerificationToken();
+    
+    // Set up the verification form (UPDATED)
+    setupVerificationForm();
+    
+    // Add other interactive features
+    initializeInteractiveFeatures();
+});
 
         // Contact form functionality
         document.getElementById('contactForm').addEventListener('submit', function(e) {
