@@ -3,81 +3,948 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DieBuddy</title>
+    <title>DieBuddy - Track Your Game Stats</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
         nav {
-            background: #333;
+            background: rgba(51, 51, 51, 0.95);
+            backdrop-filter: blur(10px);
             color: white;
-            padding: 15px;
-            text-align: center;
+            padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
-            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
         }
-        nav a {
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #b22222;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
             color: white;
-            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #b22222;
+        }
+
+        /* Page containers */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 120px 2rem 60px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Home Page Styles */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #b22222;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #b22222, #dc143c);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(178, 34, 34, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(178, 34, 34, 0.4);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #b22222;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Contact Form */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            color: #b22222;
+            margin-right: 1rem;
+            width: 30px;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #b22222;
+        }
+
+        .submit-btn {
+            background: #b22222;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #dc143c;
+        }
+
+        /* Privacy Policy Styles */
+        .privacy-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .privacy-content h2 {
+            color: #b22222;
+            margin: 2rem 0 1rem;
+            font-size: 1.8rem;
+        }
+
+        .privacy-content h3 {
+            color: #333;
+            margin: 1.5rem 0 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .privacy-content p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* Verification Page */
+        .verification-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .verification-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 2rem;
+        }
+
+        .verification-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        /* App Preview */
+        .app-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin: 4rem 0;
+        }
+
+        .app-screens {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .phone-mockup {
+            background: #333;
+            border-radius: 25px;
+            padding: 20px;
+            width: 200px;
+            height: 400px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .phone-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 2rem;
+            }
+
+            .contact-grid,
+            .app-preview {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(51, 51, 51, 0.95);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            margin-bottom: 1rem;
+        }
+
+        .footer a {
+            color: #b22222;
             text-decoration: none;
         }
-        section {
-            padding: 80px 20px;
-            margin-top: 50px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
+
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-
+    <!-- Navigation -->
     <nav>
-        <a href="#home">Home</a>
-        <a href="#features">Features</a>
-        <a href="#contact">Contact</a>
-        <a href="#privacy">Privacy Policy</a>
+        <div class="nav-container">
+            <div class="logo">DieBuddy</div>
+            <div class="nav-links">
+                <a href="#" onclick="showPage('home')">Home</a>
+                <a href="#" onclick="showPage('features')">Features</a>
+                <a href="#" onclick="showPage('contact')">Contact</a>
+                <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+            </div>
+        </div>
     </nav>
 
-    <section id="home">
+    <!-- Home Page -->
+    <div id="home" class="page active">
         <div class="container">
-            <h1>Welcome the DieBuddy Website</h1>
-            <p>Outlining upcoming things to the app and future changes.</p>
-            <p>Support the DieBuddy project at https://gofund.me/655b9f14</p>
-        </div>
-    </section>
+            <div class="hero">
+                <h1>DieBuddy</h1>
+                <p>The ultimate companion app for tracking your die game statistics, organizing groups, and competing with friends.</p>
+                <a href="https://gofund.me/655b9f14" class="cta-button" target="_blank">Support Our Project</a>
+            </div>
 
-    <section id="features">
+            <div class="app-preview">
+                <div>
+                    <h2>Track Every Game</h2>
+                    <p>DieBuddy revolutionizes how you track and analyze your die game performance. Whether you're playing casually with friends or competing in tournaments, our app provides comprehensive statistics and insights to help you improve your game.</p>
+                    
+                    <h3>Key Benefits:</h3>
+                    <ul>
+                        <li>🎯 Real-time stat tracking during games</li>
+                        <li>📊 Detailed performance analytics</li>
+                        <li>👥 Group management and competitions</li>
+                        <li>🏆 Leaderboards and achievements</li>
+                        <li>📱 Cross-platform synchronization</li>
+                    </ul>
+                </div>
+                <div class="app-screens">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <h3>🎮 Game Scoring</h3>
+                            <p>Live stat tracking</p>
+                            <div style="margin: 1rem 0;">
+                                <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px;">Hits: 12</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px;">Misses: 3</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px;">Score: 24</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <h3>📊 Your Stats</h3>
+                            <p>Performance analytics</p>
+                            <div style="margin: 1rem 0;">
+                                <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px;">Games: 47</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px;">Win Rate: 68%</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px;">Avg Score: 18.2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 DieBuddy. All rights reserved.</p>
+            <p>Made with ❤️ for the die game community</p>
+        </div>
+    </div>
+
+    <!-- Features Page -->
+    <div id="features" class="page">
         <div class="container">
-            <h2>App Features</h2>
-            <p>-Tracking of Player stats, lifetime and averages per game.</p>
-            <p>-Game Logs of games played and individual stats for that game.</p>
-        </div>
-    </section>
+            <h1 style="text-align: center; color: #b22222; margin-bottom: 3rem;">App Features</h1>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Comprehensive Statistics</h3>
+                    <p>Track detailed lifetime stats including hits, misses, scores, and specialized moves like dinks, sinks, and field goals. Get averages per game and see your improvement over time.</p>
+                </div>
 
-    <section id="contact">
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Live Game Scoring</h3>
+                    <p>Real-time stat tracking during gameplay with intuitive swipe controls to switch between teams. Support for 2v2 games with team-based statistics and scoring.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Group Management</h3>
+                    <p>Create and manage groups with friends. Invite players, track group statistics, and organize tournaments. Admin controls for group owners and moderators.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Game Logs</h3>
+                    <p>Complete history of all games played with detailed breakdowns of individual and team performance. Review past games and analyze your progress.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Friends System</h3>
+                    <p>Connect with other players, send friend requests, and build your gaming network. Real-time notifications for invites and game updates.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Customizable Rules</h3>
+                    <p>Configure game rules including Hot Die (flip cups) and Field Goals settings. Adapt the app to match your preferred playing style and house rules.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Hit percentages, win rates, and performance trends. Compare your stats with friends and see detailed breakdowns of your strengths and areas for improvement.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Cross-Platform Sync</h3>
+                    <p>Your data syncs across all devices. Start a game on your phone and view stats on any device. Never lose your progress or game history.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privacy First</h3>
+                    <p>Your data belongs to you. We don't sell or share personal information. Secure authentication and data encryption keep your information safe.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <h2 style="color: #b22222; margin-bottom: 1rem;">Coming Soon</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 2rem;">We're constantly improving DieBuddy with new features based on community feedback.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card" style="opacity: 0.7;">
+                        <div class="feature-icon">🏅</div>
+                        <h3>Achievements & Badges</h3>
+                        <p>Unlock achievements for milestones and special accomplishments. Show off your skills with unique badges and titles.</p>
+                    </div>
+
+                    <div class="feature-card" style="opacity: 0.7;">
+                        <div class="feature-icon">📈</div>
+                        <h3>Tournament Mode</h3>
+                        <p>Organize and participate in structured tournaments with brackets, seeding, and championship tracking.</p>
+                    </div>
+
+                    <div class="feature-card" style="opacity: 0.7;">
+                        <div class="feature-icon">🎥</div>
+                        <h3>Game Highlights</h3>
+                        <p>Automatically capture and share your best plays and most impressive statistics with the community.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
         <div class="container">
-            <h2>Contact</h2>
-            <p>Email: jrvaughn2003@gmail.com</p>
-        </div>
-    </section>
+            <h1 style="text-align: center; color: #b22222; margin-bottom: 3rem;">Contact Us</h1>
+            
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h2 style="color: #b22222; margin-bottom: 2rem;">Get in Touch</h2>
+                    
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">📧</span>
+                        <div>
+                            <strong>Email</strong><br>
+                            <a href="mailto:info@diebuddy.com" style="color: #b22222;">info@diebuddy.com</a>
+                        </div>
+                    </div>
 
-    <section id="privacy">
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">💬</span>
+                        <div>
+                            <strong>Support</strong><br>
+                            For technical issues and app support
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">💡</span>
+                        <div>
+                            <strong>Feature Requests</strong><br>
+                            We love hearing your ideas for new features
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">🤝</span>
+                        <div>
+                            <strong>Partnerships</strong><br>
+                            Business inquiries and collaboration opportunities
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 10px;">
+                        <h3 style="color: #b22222; margin-bottom: 1rem;">Support the Project</h3>
+                        <p>Help us continue developing DieBuddy by supporting our GoFundMe campaign.</p>
+                        <a href="https://gofund.me/655b9f14" target="_blank" style="color: #b22222; font-weight: bold; text-decoration: none;">🎯 Support DieBuddy</a>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3 style="color: #b22222; margin-bottom: 1.5rem;">Send us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Page -->
+    <div id="privacy" class="page">
         <div class="container">
-            <h2>Privacy Policy</h2>
-            <p><strong>Effective Date:</strong> 4/3/2025</p>
-            <p>We value your privacy. This Privacy Policy explains how we collect, use, and protect your data.</p>
-            <p><strong>1. Information We Collect</strong><br>We do not collect any data from the app or personal data.</p>
-            <p><strong>2. How We Use Your Information</strong><br>We don't.</p>
-            <p><strong>3. Data Sharing</strong><br>We do not sell or share personal data.</p>
-            <p><strong>4. Contact Us</strong><br>If you have any questions, contact us at jrvaughn2003@gmail.com.</p>
-        </div>
-    </section>
+            <div class="privacy-content">
+                <h1 style="text-align: center; color: #b22222; margin-bottom: 3rem;">Privacy Policy</h1>
+                
+                <p><strong>Effective Date:</strong> January 8, 2025</p>
+                <p><strong>Last Updated:</strong> January 8, 2025</p>
 
+                <h2>1. Introduction</h2>
+                <p>Welcome to DieBuddy. We are committed to protecting your privacy and ensuring you have a positive experience on our app and website. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services.</p>
+
+                <h2>2. Information We Collect</h2>
+                
+                <h3>2.1 Information You Provide</h3>
+                <p>When you use DieBuddy, we may collect information you voluntarily provide, including:</p>
+                <ul>
+                    <li>Account information (username, email address, profile picture)</li>
+                    <li>Game statistics and performance data</li>
+                    <li>Group and friend connections</li>
+                    <li>Messages and communications within the app</li>
+                    <li>Feedback and support requests</li>
+                </ul>
+
+                <h3>2.2 Automatically Collected Information</h3>
+                <p>We may automatically collect certain technical information, including:</p>
+                <ul>
+                    <li>Device information (device type, operating system, app version)</li>
+                    <li>Usage analytics (features used, session duration, crash reports)</li>
+                    <li>Performance metrics to improve app functionality</li>
+                </ul>
+
+                <h2>3. How We Use Your Information</h2>
+                <p>We use the collected information to:</p>
+                <ul>
+                    <li>Provide and maintain the DieBuddy service</li>
+                    <li>Track your game statistics and progress</li>
+                    <li>Enable social features like friends and groups</li>
+                    <li>Improve app performance and user experience</li>
+                    <li>Send important updates and notifications</li>
+                    <li>Provide customer support</li>
+                    <li>Analyze usage patterns to enhance features</li>
+                </ul>
+
+                <h2>4. Information Sharing and Disclosure</h2>
+                <p>We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following limited circumstances:</p>
+                <ul>
+                    <li><strong>With Other Users:</strong> Your username, profile picture, and game statistics may be visible to friends and group members as part of the app's social features</li>
+                    <li><strong>Service Providers:</strong> We may share data with trusted third-party services that help us operate the app (hosting, analytics, authentication)</li>
+                    <li><strong>Legal Requirements:</strong> We may disclose information if required by law, court order, or legal process</li>
+                    <li><strong>Safety and Security:</strong> We may share information to protect the rights, safety, and security of our users and the public</li>
+                </ul>
+
+                <h2>5. Data Security</h2>
+                <p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. This includes:</p>
+                <ul>
+                    <li>Encryption of data in transit and at rest</li>
+                    <li>Secure authentication systems</li>
+                    <li>Regular security assessments</li>
+                    <li>Limited access to personal data on a need-to-know basis</li>
+                </ul>
+
+                <h2>6. Data Retention</h2>
+                <p>We retain your personal information only as long as necessary to provide our services and fulfill the purposes outlined in this Privacy Policy. You may request deletion of your account and associated data at any time through the app settings or by contacting us.</p>
+
+                <h2>7. Your Rights and Choices</h2>
+                <p>You have the following rights regarding your personal information:</p>
+                <ul>
+                    <li><strong>Access:</strong> Request access to your personal data</li>
+                    <li><strong>Correction:</strong> Update or correct inaccurate information</li>
+                    <li><strong>Deletion:</strong> Request deletion of your account and data</li>
+                    <li><strong>Privacy Settings:</strong> Control visibility of your statistics and profile information</li>
+                    <li><strong>Communication Preferences:</strong> Opt out of non-essential notifications</li>
+                </ul>
+
+                <h2>8. Children's Privacy</h2>
+                <p>DieBuddy is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information promptly.</p>
+
+                <h2>9. International Data Transfers</h2>
+                <p>Your information may be transferred to and processed in countries other than your own. We ensure that such transfers comply with applicable data protection laws and that appropriate safeguards are in place.</p>
+
+                <h2>10. Third-Party Services</h2>
+                <p>DieBuddy may contain links to third-party websites or integrate with third-party services. This Privacy Policy does not apply to such third-party services. We encourage you to review the privacy policies of any third-party services you use.</p>
+
+                <h2>11. Changes to This Privacy Policy</h2>
+                <p>We may update this Privacy Policy from time to time to reflect changes in our practices or applicable laws. We will notify you of any material changes by posting the updated policy in the app and updating the "Last Updated" date. Your continued use of DieBuddy after such changes constitutes acceptance of the updated Privacy Policy.</p>
+
+                <h2>12. Contact Us</h2>
+                <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please contact us at:</p>
+                <p>
+                    <strong>Email:</strong> <a href="mailto:info@diebuddy.com" style="color: #b22222;">info@diebuddy.com</a><br>
+                    <strong>Subject Line:</strong> Privacy Policy Inquiry
+                </p>
+
+                <p>We are committed to addressing your privacy concerns and will respond to your inquiries in a timely manner.</p>
+
+                <hr style="margin: 2rem 0; border: none; height: 1px; background: #e1e5e9;">
+                
+                <p style="font-size: 0.9rem; color: #666; text-align: center;">
+                    This Privacy Policy is effective as of the date stated above and applies to all users of the DieBuddy application and website.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Verification Page -->
+    <div id="verification" class="page">
+        <div class="container">
+            <div class="verification-container">
+                <div class="verification-icon">✅</div>
+                <h1 style="color: #b22222; margin-bottom: 1rem;">Email Verification</h1>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">Verify your email address to complete your DieBuddy account setup.</p>
+
+                <div class="verification-form">
+                    <h3 style="margin-bottom: 1.5rem;">Enter Verification Code</h3>
+                    <p style="margin-bottom: 2rem; color: #666;">We've sent a verification code to your email address. Please enter the code below to verify your account.</p>
+                    
+                    <form id="verificationForm">
+                        <div class="form-group">
+                            <label for="verificationCode">Verification Code</label>
+                            <input type="text" id="verificationCode" name="verificationCode" maxlength="6" placeholder="Enter 6-digit code" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;" required>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Verify Email</button>
+                    </form>
+
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <p style="color: #666; margin-bottom: 1rem;">Didn't receive the code?</p>
+                        <button onclick="resendCode()" style="background: none; border: none; color: #b22222; font-weight: bold; cursor: pointer; text-decoration: underline;">Resend Code</button>
+                    </div>
+
+                    <div id="verificationStatus" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none;"></div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 15px;">
+                    <h4 style="color: #b22222; margin-bottom: 1rem;">Having trouble?</h4>
+                    <ul style="text-align: left; color: #666;">
+                        <li>Check your spam/junk folder</li>
+                        <li>Make sure you entered the correct email address</li>
+                        <li>Wait a few minutes for the email to arrive</li>
+                        <li>Contact support at <a href="mailto:info@diebuddy.com" style="color: #b22222;">info@diebuddy.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update URL without page reload
+            window.history.pushState({page: pageId}, '', `#${pageId}`);
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.page) {
+                showPage(event.state.page);
+            } else {
+                // Default to home page
+                showPage('home');
+            }
+        });
+
+        // Check URL on page load for direct navigation
+        window.addEventListener('load', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                showPage(hash);
+            } else {
+                showPage('home');
+            }
+        });
+
+        // Contact form functionality
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            // Create mailto link
+            const mailtoLink = `mailto:info@diebuddy.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            alert('Your default email client should open with your message. If it doesn\'t, please copy the message and send it manually to info@diebuddy.com');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Verification form functionality
+        document.getElementById('verificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const code = document.getElementById('verificationCode').value;
+            const statusDiv = document.getElementById('verificationStatus');
+            
+            if (code.length !== 6) {
+                showVerificationStatus('Please enter a 6-digit verification code.', 'error');
+                return;
+            }
+            
+            // Simulate verification process
+            showVerificationStatus('Verifying your code...', 'info');
+            
+            setTimeout(() => {
+                // This would normally send the code to your backend for verification
+                // For demo purposes, we'll simulate a successful verification
+                if (code === '123456') {
+                    showVerificationStatus('Email verified successfully! Welcome to DieBuddy!', 'success');
+                    setTimeout(() => {
+                        showPage('home');
+                    }, 2000);
+                } else {
+                    showVerificationStatus('Invalid verification code. Please try again.', 'error');
+                }
+            }, 2000);
+        });
+
+        function showVerificationStatus(message, type) {
+            const statusDiv = document.getElementById('verificationStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = message;
+            
+            // Reset classes
+            statusDiv.classList.remove('success', 'error', 'info');
+            
+            // Add appropriate class and styling
+            if (type === 'success') {
+                statusDiv.style.background = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.style.border = '1px solid #c3e6cb';
+            } else if (type === 'error') {
+                statusDiv.style.background = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.style.border = '1px solid #f5c6cb';
+            } else {
+                statusDiv.style.background = '#d1ecf1';
+                statusDiv.style.color = '#0c5460';
+                statusDiv.style.border = '1px solid #bee5eb';
+            }
+        }
+
+        function resendCode() {
+            const statusDiv = document.getElementById('verificationStatus');
+            showVerificationStatus('Verification code resent! Please check your email.', 'info');
+            
+            // In a real application, you would make an API call to resend the verification email
+            console.log('Resending verification code...');
+        }
+
+        // Add special access to verification page (normally this would be behind authentication)
+        function accessVerification() {
+            const password = prompt('Enter access code for verification page:');
+            if (password === 'verify123') {
+                showPage('verification');
+            } else {
+                alert('Access denied. This page is for email verification only.');
+            }
+        }
+
+        // Add keyboard navigation for verification code input
+        document.getElementById('verificationCode').addEventListener('input', function(e) {
+            // Only allow numbers
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // Auto-submit when 6 digits are entered
+            if (this.value.length === 6) {
+                setTimeout(() => {
+                    document.getElementById('verificationForm').dispatchEvent(new Event('submit'));
+                }, 500);
+            }
+        });
+
+        // Smooth scrolling for internal links
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const targetId = e.target.getAttribute('href').substring(1);
+                if (document.getElementById(targetId)) {
+                    showPage(targetId);
+                }
+            }
+        });
+
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading animation to CTA button
+            const ctaButton = document.querySelector('.cta-button');
+            if (ctaButton) {
+                ctaButton.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            }
+
+            // Add hover effects to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+        });
+
+        // Secret access to verification page - remove this in production
+        let keySequence = '';
+        document.addEventListener('keydown', function(e) {
+            keySequence += e.key;
+            if (keySequence.includes('verify')) {
+                keySequence = '';
+                accessVerification();
+            }
+            if (keySequence.length > 10) {
+                keySequence = keySequence.substring(keySequence.length - 10);
+            }
+        });
+    </script>
 </body>
 </html>
