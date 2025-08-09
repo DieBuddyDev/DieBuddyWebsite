@@ -816,139 +816,260 @@
         // =====================================
         // EMAIL VERIFICATION FUNCTIONS
         // =====================================
-        
-        function checkForEmailVerificationToken() {
-            console.log('🔍 DieBuddy: Checking for email verification...');
-            console.log('Current URL:', window.location.href);
+        console.log('🔍 DEBUG: Starting email verification debug script');
+
+        // Override the checkForEmailVerificationToken function with enhanced debugging
+        window.checkForEmailVerificationToken = function() {
+            console.log('='.repeat(50));
+            console.log('🔍 DEBUGGING EMAIL VERIFICATION');
+            console.log('='.repeat(50));
             
-            const currentUrl = window.location.href;
+            // Log the complete URL
+            console.log('Full URL:', window.location.href);
+            console.log('Protocol:', window.location.protocol);
+            console.log('Host:', window.location.host);
+            console.log('Pathname:', window.location.pathname);
+            console.log('Search:', window.location.search);
+            console.log('Hash:', window.location.hash);
+            
+            // Parse all possible parameters
             const urlParams = new URLSearchParams(window.location.search);
             const hashParams = new URLSearchParams(window.location.hash.substring(1));
             
-            // Log all parameters for debugging
-            console.log('URL Search Params:', Object.fromEntries(urlParams));
-            console.log('Hash Params:', Object.fromEntries(hashParams));
+            console.log('URL Parameters:');
+            for (const [key, value] of urlParams.entries()) {
+                console.log(`  ${key}: ${value.substring(0, 50)}${value.length > 50 ? '...' : ''}`);
+            }
             
-            // Check for Supabase verification tokens (can be in search or hash)
+            console.log('Hash Parameters:');
+            for (const [key, value] of hashParams.entries()) {
+                console.log(`  ${key}: ${value.substring(0, 50)}${value.length > 50 ? '...' : ''}`);
+            }
+            
+            // Check for all possible verification indicators
             const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
             const refreshToken = urlParams.get('refresh_token') || hashParams.get('refresh_token');
             const type = urlParams.get('type') || hashParams.get('type');
             const tokenType = urlParams.get('token_type') || hashParams.get('token_type');
+            const errorCode = urlParams.get('error') || hashParams.get('error');
+            const errorDescription = urlParams.get('error_description') || hashParams.get('error_description');
+            
+            console.log('Token Analysis:');
+            console.log('  Access Token:', accessToken ? `Present (${accessToken.length} chars)` : 'Missing');
+            console.log('  Refresh Token:', refreshToken ? `Present (${refreshToken.length} chars)` : 'Missing');
+            console.log('  Type:', type || 'Missing');
+            console.log('  Token Type:', tokenType || 'Missing');
+            console.log('  Error:', errorCode || 'None');
+            console.log('  Error Description:', errorDescription || 'None');
             
             // Check for verification indicators
             const hasVerificationHash = window.location.hash.includes('verification');
             const hasVerificationParam = urlParams.get('verified') === 'true';
+            const hasConfirmationParam = window.location.href.includes('confirmation');
             
-            console.log('Verification analysis:', {
-                accessToken: !!accessToken,
-                refreshToken: !!refreshToken,
-                type: type,
-                tokenType: tokenType,
-                hasVerificationHash: hasVerificationHash,
-                hasVerificationParam: hasVerificationParam
-            });
+            console.log('Verification Indicators:');
+            console.log('  Hash contains "verification":', hasVerificationHash);
+            console.log('  Has verified=true param:', hasVerificationParam);
+            console.log('  URL contains "confirmation":', hasConfirmationParam);
             
-            // Determine if this is a verification request
-            const isVerificationRequest = 
-                (type === 'signup' && accessToken) || // Standard Supabase verification
-                hasVerificationHash || // Hash-based navigation
-                hasVerificationParam || // Custom parameter
-                accessToken; // Any access token
+            // Determine what action to take
+            let shouldShowVerification = false;
+            let reason = '';
             
-            if (isVerificationRequest) {
-                console.log('🎯 VERIFICATION REQUEST DETECTED');
-                const pageShown = showPage('verification');
+            if (errorCode) {
+                reason = `Error detected: ${errorCode}`;
+                shouldShowVerification = true;
+            } else if (type === 'signup' && accessToken) {
+                reason = 'Supabase signup verification tokens found';
+                shouldShowVerification = true;
+            } else if (accessToken) {
+                reason = 'Access token found (any type)';
+                shouldShowVerification = true;
+            } else if (hasVerificationHash) {
+                reason = 'Manual navigation to verification page';
+                shouldShowVerification = true;
+            } else if (hasVerificationParam) {
+                reason = 'Custom verification parameter found';
+                shouldShowVerification = true;
+            } else if (hasConfirmationParam) {
+                reason = 'Confirmation URL detected';
+                shouldShowVerification = true;
+            }
+            
+            console.log('Decision:');
+            console.log('  Should show verification:', shouldShowVerification);
+            console.log('  Reason:', reason);
+            
+            if (shouldShowVerification) {
+                console.log('🎯 SHOWING VERIFICATION PAGE');
                 
-                if (pageShown) {
-                    if (accessToken && refreshToken) {
+                // Force show verification page
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                const verificationPage = document.getElementById('verification');
+                if (verificationPage) {
+                    verificationPage.classList.add('active');
+                    console.log('✅ Verification page displayed');
+                    
+                    // Update the content based on what we found
+                    if (accessToken && refreshToken && !errorCode) {
                         console.log('🔄 Processing automatic verification...');
                         handleEmailVerification(accessToken, refreshToken);
+                    } else if (errorCode) {
+                        console.log('❌ Showing error message...');
+                        showVerificationError(errorCode, errorDescription);
                     } else {
                         console.log('🔧 Showing manual verification options...');
                         showManualVerificationForm();
                     }
+                } else {
+                    console.error('❌ Verification page element not found!');
                 }
-                return true;
             } else {
-                console.log('📍 No verification request detected');
-                
-                // Check for manual navigation to verification page
-                if (window.location.hash === '#verification') {
-                    const pageShown = showPage('verification');
-                    if (pageShown) {
-                        showManualVerificationForm();
-                    }
-                    return true;
-                }
+                console.log('📍 No verification indicators found, showing home page');
+                showPage('home');
             }
             
-            return false;
-        }
+            console.log('='.repeat(50));
+            return shouldShowVerification;
+        };
         
-        async function handleEmailVerification(accessToken, refreshToken) {
-            updateVerificationContent(`
-                <div style="text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
-                    <h3 style="margin-bottom: 1rem;">Verifying Your Email...</h3>
-                    <p>Processing your verification, please wait...</p>
-                </div>
-            `);
+        // Add function to show verification errors
+        window.showVerificationError = function(errorCode, errorDescription) {
+            const verificationForm = document.querySelector('.verification-form');
+            if (verificationForm) {
+                verificationForm.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem; color: #f44336;">❌</div>
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Verification Error</h3>
+                        <p style="margin-bottom: 1rem;"><strong>Error:</strong> ${errorCode}</p>
+                        ${errorDescription ? `<p style="margin-bottom: 2rem; color: #666;">${errorDescription}</p>` : ''}
+                        <button onclick="resendDieBuddyVerification()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; margin-right: 1rem;">Resend Verification Email</button>
+                        <button onclick="showPage('contact')" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">Contact Support</button>
+                    </div>
+                `;
+            }
+        };
+        
+        // Enhanced handleEmailVerification with more debugging
+        window.handleEmailVerification = async function(accessToken, refreshToken) {
+            console.log('🔄 Starting email verification process...');
+            
+            const verificationForm = document.querySelector('.verification-form');
+            if (verificationForm) {
+                verificationForm.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
+                        <h3 style="margin-bottom: 1rem;">Verifying Your Email...</h3>
+                        <p>Processing your verification tokens...</p>
+                        <div style="margin-top: 1rem; font-family: monospace; font-size: 0.8rem; color: #666;">
+                            Access Token: ${accessToken ? accessToken.substring(0, 20) + '...' : 'Missing'}<br>
+                            Refresh Token: ${refreshToken ? refreshToken.substring(0, 20) + '...' : 'Missing'}
+                        </div>
+                    </div>
+                `;
+            }
         
             try {
-                if (!supabaseWeb) {
-                    throw new Error('Supabase not configured properly. Please check your configuration.');
+                // Check if Supabase is available
+                if (!window.supabase) {
+                    throw new Error('Supabase library not loaded');
+                }
+                
+                // Check if supabaseWeb is initialized
+                if (!window.supabaseWeb) {
+                    throw new Error('Supabase client not initialized - check your SUPABASE_URL and SUPABASE_ANON_KEY');
                 }
         
                 console.log('🔄 Setting Supabase session...');
+                console.log('Access token length:', accessToken ? accessToken.length : 0);
+                console.log('Refresh token length:', refreshToken ? refreshToken.length : 0);
                 
                 // Set the session with tokens
-                const { data, error } = await supabaseWeb.auth.setSession({
+                const { data, error } = await window.supabaseWeb.auth.setSession({
                     access_token: accessToken,
                     refresh_token: refreshToken
                 });
         
+                console.log('Supabase setSession result:', { data: !!data, error: !!error });
+                
                 if (error) {
-                    console.error('Session error:', error);
+                    console.error('Supabase session error:', error);
                     throw error;
                 }
         
                 if (data.user) {
-                    console.log('✅ User verified:', data.user.id);
+                    console.log('✅ User session established:', data.user.id);
+                    console.log('User email confirmed:', data.user.email_confirmed_at);
                     
-                    // Update database
-                    await updateEmailVerificationStatus(data.user.id);
+                    // Try to update database
+                    try {
+                        await window.updateEmailVerificationStatus(data.user.id);
+                    } catch (dbError) {
+                        console.warn('Database update failed but verification succeeded:', dbError);
+                    }
                     
                     // Show success
-                    updateVerificationContent(`
-                        <div style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem; color: #4CAF50;">✅</div>
-                            <h3 style="color: #4CAF50; margin-bottom: 1rem;">Email Verified Successfully!</h3>
-                            <p style="margin-bottom: 2rem;">Welcome to DieBuddy! Your email has been verified and your account is ready to use.</p>
-                            <button onclick="goToDieBuddyApp()" style="background: #b22222; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-right: 1rem;">Launch DieBuddy App</button>
-                            <button onclick="showPage('home')" style="background: #6c757d; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Back to Home</button>
-                        </div>
-                    `);
+                    if (verificationForm) {
+                        verificationForm.innerHTML = `
+                            <div style="text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem; color: #4CAF50;">✅</div>
+                                <h3 style="color: #4CAF50; margin-bottom: 1rem;">Email Verified Successfully!</h3>
+                                <p style="margin-bottom: 2rem;">Welcome to DieBuddy! Your email has been verified.</p>
+                                <div style="margin-bottom: 2rem; padding: 1rem; background: #f0f8ff; border-radius: 8px;">
+                                    <small style="color: #666;">
+                                        User ID: ${data.user.id}<br>
+                                        Email: ${data.user.email}<br>
+                                        Confirmed: ${data.user.email_confirmed_at ? 'Yes' : 'No'}
+                                    </small>
+                                </div>
+                                <button onclick="goToDieBuddyApp()" style="background: #b22222; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-right: 1rem;">Launch DieBuddy App</button>
+                                <button onclick="showPage('home')" style="background: #6c757d; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Back to Home</button>
+                            </div>
+                        `;
+                    }
                     
                     // Clean up URL
                     window.history.replaceState({}, document.title, 'https://diebuddy.com/#verification');
                     
                 } else {
-                    throw new Error('No user data received during verification');
+                    throw new Error('No user data received from Supabase');
                 }
         
             } catch (error) {
                 console.error('❌ Verification failed:', error);
-                updateVerificationContent(`
-                    <div style="text-align: center;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem; color: #f44336;">❌</div>
-                        <h3 style="color: #f44336; margin-bottom: 1rem;">Verification Failed</h3>
-                        <p style="margin-bottom: 2rem;">There was an issue verifying your email: ${error.message}</p>
-                        <button onclick="showManualVerificationForm()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; margin-right: 1rem;">Try Again</button>
-                        <button onclick="showPage('contact')" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">Contact Support</button>
-                    </div>
-                `);
+                
+                if (verificationForm) {
+                    verificationForm.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem; color: #f44336;">❌</div>
+                            <h3 style="color: #f44336; margin-bottom: 1rem;">Verification Failed</h3>
+                            <p style="margin-bottom: 1rem;"><strong>Error:</strong> ${error.message}</p>
+                            <div style="margin-bottom: 2rem; padding: 1rem; background: #fff3cd; border-radius: 8px; text-align: left;">
+                                <strong>Troubleshooting:</strong><br>
+                                1. Check that your Supabase URL and anon key are correct<br>
+                                2. Verify that email confirmation is enabled in Supabase<br>
+                                3. Make sure redirect URLs are properly configured<br>
+                                4. Try requesting a new verification email
+                            </div>
+                            <button onclick="showManualVerificationForm()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; margin-right: 1rem;">Try Again</button>
+                            <button onclick="showPage('contact')" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">Contact Support</button>
+                        </div>
+                    `;
+                }
             }
-        }
+        };
+        
+        // Add this to run immediately when the script loads
+        console.log('🚀 Debug script loaded. URL will be analyzed on page load.');
+        
+        // Force immediate check when script loads
+        setTimeout(() => {
+            console.log('🔍 Running immediate verification check...');
+            checkForEmailVerificationToken();
+        }, 100);
         
         async function updateEmailVerificationStatus(userId) {
             try {
