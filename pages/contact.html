@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - DieBuddy</title>
+    
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/navigation.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/logo/favicon.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">DieBuddy</div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="features.html">Features</a>
+                <a href="contact.html" style="color: #b22222;">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Page Content -->
+    <div class="page active" style="padding-top: 120px;">
+        <div class="container">
+            <h1 style="text-align: center; color: #b22222; margin-bottom: 3rem;">Contact Us</h1>
+            
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h2 style="color: #b22222; margin-bottom: 2rem;">Get in Touch</h2>
+                    
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">📧</span>
+                        <div>
+                            <strong>Email</strong><br>
+                            <a href="mailto:info@diebuddy.com" style="color: #b22222;">info@diebuddy.com</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">💬</span>
+                        <div>
+                            <strong>Support</strong><br>
+                            For technical issues and app support
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">💡</span>
+                        <div>
+                            <strong>Feature Requests</strong><br>
+                            We love hearing your ideas for new features
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem; margin-right: 1rem;">🤝</span>
+                        <div>
+                            <strong>Partnerships</strong><br>
+                            Business inquiries and collaboration opportunities
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 10px;">
+                        <h3 style="color: #b22222; margin-bottom: 1rem;">Support the Project</h3>
+                        <p>Help us continue developing DieBuddy by supporting our GoFundMe campaign.</p>
+                        <a href="https://gofund.me/655b9f14" target="_blank" style="color: #b22222; font-weight: bold; text-decoration: none;">🎯 Support DieBuddy</a>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3 style="color: #b22222; margin-bottom: 1.5rem;">Send us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Additional Contact Information -->
+            <div style="margin-top: 4rem; padding: 3rem; background: #f8f9fa; border-radius: 15px;">
+                <h2 style="color: #b22222; text-align: center; margin-bottom: 2rem;">Frequently Asked Questions</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h4 style="color: #b22222; margin-bottom: 1rem;">📱 When will the app be released?</h4>
+                        <p>DieBuddy is currently in active development. We're working hard to deliver a polished experience and will announce the release date soon. Follow our updates for the latest news!</p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #b22222; margin-bottom: 1rem;">💰 Will the app cost money?</h4>
+                        <p>We're planning to offer DieBuddy as a free app with optional premium features. Basic stat tracking and gameplay will always be free for all users.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #b22222; margin-bottom: 1rem;">📊 What games will be supported?</h4>
+                        <p>Initially focusing on die-based games like beer die, but we're designing the system to support various dice games. Let us know what games you'd like to see!</p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #b22222; margin-bottom: 1rem;">🔧 How can I help with development?</h4>
+                        <p>We welcome feedback, feature ideas, and beta testing volunteers! Contact us if you're interested in helping shape DieBuddy's development.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+            <div>
+                <h4 style="color: #b22222; margin-bottom: 1rem;">DieBuddy</h4>
+                <p>Track your games, improve your skills, have more fun!</p>
+                <div style="margin-top: 1rem;">
+                    <a href="https://gofund.me/655b9f14" target="_blank" style="color: #b22222; margin-right: 1rem;">💖 Support Us</a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 style="color: #b22222; margin-bottom: 1rem;">Quick Links</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <a href="../index.html">Home</a>
+                    <a href="features.html">Features</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 style="color: #b22222; margin-bottom: 1rem;">Connect</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <a href="mailto:info@diebuddy.com">📧 Email Support</a>
+                    <a href="#" onclick="alert('Discord coming soon!')">💬 Join Discord</a>
+                    <a href="#" onclick="alert('Twitter coming soon!')">🐦 Follow Updates</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem; text-align: center;">
+            <p>&copy; 2025 DieBuddy. All rights reserved.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Made with ❤️ for the gaming community</p>
+        </div>
+    </div>
+
+    <!-- External JavaScript Files -->
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/supabase.js"></script>
+    <script src="../assets/js/main.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    <script>
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            const mailtoLink = `mailto:info@diebuddy.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+            
+            window.location.href = mailtoLink;
+            alert('Your default email client should open with your message. If it doesn\'t, please copy the message and send it manually to info@diebuddy.com');
+            this.reset();
+        });
+
+        // Set up any missing styles (fallback for external CSS)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fallback styles if external CSS doesn't load
+            if (!document.querySelector('link[href*="main.css"]')) {
+                const style = document.createElement('style');
+                style.textContent = `
+                    body { 
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        margin: 0; padding: 0; min-height: 100vh; color: #333;
+                    }
+                    .container { 
+                        max-width: 1200px; margin: 0 auto; 
+                        background: rgba(255, 255, 255, 0.95); 
+                        padding: 3rem; border-radius: 20px; 
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                    }
+                    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+                    .contact-info { background: #f8f9fa; padding: 2rem; border-radius: 15px; }
+                    .contact-form { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+                    .form-group { margin-bottom: 1.5rem; }
+                    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+                    .form-group input, .form-group textarea { 
+                        width: 100%; padding: 1rem; border: 2px solid #e1e5e9; 
+                        border-radius: 10px; font-size: 1rem; 
+                    }
+                    .submit-btn { 
+                        background: #b22222; color: white; padding: 1rem 2rem; 
+                        border: none; border-radius: 10px; font-size: 1rem; 
+                        font-weight: 600; cursor: pointer; width: 100%; 
+                    }
+                    nav { 
+                        background: rgba(51, 51, 51, 0.95); color: white; 
+                        padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; 
+                    }
+                    .nav-container { 
+                        max-width: 1200px; margin: 0 auto; padding: 0 2rem; 
+                        display: flex; justify-content: space-between; align-items: center; 
+                    }
+                    .logo { font-size: 1.8rem; font-weight: bold; color: #b22222; }
+                    .nav-links { display: flex; gap: 2rem; }
+                    .nav-links a { color: white; text-decoration: none; font-weight: 500; }
+                    .footer { 
+                        background: rgba(51, 51, 51, 0.95); color: white; 
+                        text-align: center; padding: 2rem; margin-top: 4rem; 
+                    }
+                    @media (max-width: 768px) {
+                        .contact-grid { grid-template-columns: 1fr; }
+                        .container { padding: 2rem; margin: 0 1rem; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        });
+    </script>
+</body>
+</html>
