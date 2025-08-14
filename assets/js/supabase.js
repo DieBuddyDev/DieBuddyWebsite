@@ -3,7 +3,7 @@
    ===================================== */
 
 // TODO: Update these with your actual Supabase credentials
-const SUPABASE_URL = 'your-actual-supabase-url';
+const SUPABASE_URL = 'https://YOUR_SUPABASE_URL';
 const SUPABASE_ANON_KEY = 'your-actual-anon-key';
 
 // Initialize Supabase client (only if Supabase script is loaded)
