@@ -1,0 +1,138 @@
+/* =====================================
+   CORE STYLES - Extracted from your current website
+   ===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* Page containers */
+.page {
+    display: none;
+    min-height: 100vh;
+    padding: 120px 2rem 60px;
+}
+
+.page.active {
+    display: block;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* Hero sections */
+.hero {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #b22222;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+/* Typography */
+h2 {
+    color: #b22222;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+h3 {
+    color: #b22222;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: #666;
+    line-height: 1.8;
+}
+
+/* Links */
+a {
+    color: #b22222;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #dc143c;
+    text-decoration: underline;
+}
+
+/* Lists */
+ul, ol {
+    margin-bottom: 1rem;
+    color: #666;
+}
+
+li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* Sections */
+section {
+    margin: 3rem 0;
+}
+
+/* App preview section */
+.app-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin: 4rem 0;
+}
+
+/* Footer */
+.footer {
+    background: rgba(51, 51, 51, 0.95);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+.footer p {
+    margin-bottom: 1rem;
+}
+
+.footer a {
+    color: #b22222;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
