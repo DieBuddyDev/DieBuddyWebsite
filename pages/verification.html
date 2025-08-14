@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - DieBuddy</title>
+    
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/navigation.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/logo/favicon.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">DieBuddy</div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="features.html">Features</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Email Verification Content -->
+    <div class="page active" style="padding-top: 120px;">
+        <div class="container">
+            <div class="verification-container">
+                <div class="verification-icon">✅</div>
+                <h1 style="color: #b22222; margin-bottom: 1rem;">Email Verification</h1>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">Verify your email address to complete your DieBuddy account setup.</p>
+
+                <div class="verification-form">
+                    <h3 style="margin-bottom: 1.5rem;">Enter Verification Code</h3>
+                    <p style="margin-bottom: 2rem; color: #666;">We've sent a verification code to your email address. Please enter the code below to verify your account.</p>
+                    
+                    <form id="verificationForm">
+                        <div class="form-group">
+                            <label for="verificationCode">Verification Code</label>
+                            <input type="text" id="verificationCode" name="verificationCode" maxlength="6" placeholder="Enter 6-digit code" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;" required>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Verify Email</button>
+                    </form>
+
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <p style="color: #666; margin-bottom: 1rem;">Didn't receive the code?</p>
+                        <button onclick="resendDieBuddyVerification()" style="background: none; border: none; color: #b22222; font-weight: bold; cursor: pointer; text-decoration: underline;">Resend Code</button>
+                    </div>
+
+                    <div id="verificationStatus" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none;"></div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 15px;">
+                    <h4 style="color: #b22222; margin-bottom: 1rem;">Having trouble?</h4>
+                    <ul style="text-align: left; color: #666;">
+                        <li>Check your spam/junk folder</li>
+                        <li>Make sure you entered the correct email address</li>
+                        <li>Wait a few minutes for the email to arrive</li>
+                        <li>Contact support at <a href="mailto:info@diebuddy.com" style="color: #b22222;">info@diebuddy.com</a></li>
+                    </ul>
+                </div>
+
+                <!-- Development Status Notice -->
+                <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #b22222, #dc143c); color: white; border-radius: 15px; text-align: center;">
+                    <h3 style="color: white; margin-bottom: 1rem;">🎮 DieBuddy Development Update</h3>
+                    <p style="margin-bottom: 1.5rem;">Thank you for your interest in DieBuddy! Our app is currently in active development.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                            <strong>📱 Core App</strong><br>
+                            <small>In Development</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                            <strong>📊 Statistics</strong><br>
+                            <small>Design Phase</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                            <strong>👥 Social Features</strong><br>
+                            <small>Planning</small>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-bottom: 1.5rem;">Want to stay updated and support our development?</p>
+                    <a href="https://gofund.me/655b9f14" target="_blank" style="background: white; color: #b22222; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">Support DieBuddy Development</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+            <div>
+                <h4 style="color: #b22222; margin-bottom: 1rem;">DieBuddy</h4>
+                <p>Track your games, improve your skills, have more fun!</p>
+                <div style="margin-top: 1rem;">
+                    <a href="https://gofund.me/655b9f14" target="_blank" style="color: #b22222; margin-right: 1rem;">💖 Support Us</a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 style="color: #b22222; margin-bottom: 1rem;">Support</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <a href="contact.html">📧 Contact Support</a>
+                    <a href="contact.html">❓ Get Help</a>
+                    <a href="privacy.html">🔒 Privacy Policy</a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 style="color: #b22222; margin-bottom: 1rem;">Development</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <a href="#" onclick="alert('Beta testing coming soon!')">🧪 Beta Testing</a>
+                    <a href="contact.html">💡 Feature Requests</a>
+                    <a href="#" onclick="alert('Discord coming soon!')">💬 Discord Community</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem; text-align: center;">
+            <p>&copy; 2025 DieBuddy. All rights reserved.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Verification system powered by Supabase</p>
+        </div>
+    </div>
+
+    <!-- External JavaScript Files -->
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/supabase.js"></script>
+    <script src="../assets/js/main.js"></script>
+    
+    <!-- Email Verification JavaScript (extracted from your main website) -->
+    <script>
+        // =====================================
+        // DIEBUDDY EMAIL VERIFICATION SYSTEM
+        // =====================================
+
+        console.log('🚀 DieBuddy verification system starting...');
+
+        // Supabase Configuration (use your actual credentials)
+        const SUPABASE_URL = 'https://YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+        // Initialize Supabase
+        let supabaseWeb;
+        try {
+            if (typeof window !== 'undefined' && window.supabase) {
+                supabaseWeb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase initialized successfully');
+            } else {
+                console.warn('⚠️ Supabase library not loaded');
+            }
+        } catch (error) {
+            console.error('❌ Failed to initialize Supabase:', error);
+        }
+
+        // =====================================
+        // EMAIL VERIFICATION FUNCTIONS
+        // =====================================
+        function checkForEmailVerificationToken() {
+            console.log('🔍 CHECKING EMAIL VERIFICATION');
+            
+            // Log the complete URL
+            console.log('Full URL:', window.location.href);
+            console.log('Search:', window.location.search);
+            console.log('Hash:', window.location.hash);
+            
+            // Parse all possible parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            
+            // Check for all possible verification indicators
+            const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
+            const refreshToken = urlParams.get('refresh_token') || hashParams.get('refresh_token');
+            const type = urlParams.get('type') || hashParams.get('type');
+            const errorCode = urlParams.get('error') || hashParams.get('error');
+            const errorDescription = urlParams.get('error_description') || hashParams.get('error_description');
+            
+            console.log('Token Analysis:');
+            console.log('  Access Token:', accessToken ? `Present (${accessToken.length} chars)` : 'Missing');
+            console.log('  Refresh Token:', refreshToken ? `Present (${refreshToken.length} chars)` : 'Missing');
+            console.log('  Type:', type || 'Missing');
+            console.log('  Error:', errorCode || 'None');
+            
+            // Determine what action to take
+            if (errorCode) {
+                showVerificationError(errorCode, errorDescription);
+            } else if (type === 'signup' && accessToken) {
+                handleEmailVerification(accessToken, refreshToken);
+            } else if (accessToken) {
+                handleEmailVerification(accessToken, refreshToken);
+            } else {
+                showManualVerificationForm();
+            }
+            
+            return true;
+        }
+
+        async function handleEmailVerification(accessToken, refreshToken) {
+            console.log('🔄 Starting email verification process...');
+            
+            const verificationForm = document.querySelector('.verification-form');
+            if (verificationForm) {
+                verificationForm.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⏳</div>
+                        <h3 style="margin-bottom: 1rem;">Verifying Your Email...</h3>
+                        <p>Processing your verification tokens...</p>
+                    </div>
+                `;
+            }
+
+            try {
+                // Check if Supabase is available
+                if (!supabaseWeb) {
+                    throw new Error('Supabase client not initialized');
+                }
+
+                console.log('🔄 Setting Supabase session...');
+                
+                // Set the session with tokens
+                const { data, error } = await supabaseWeb.auth.setSession({
+                    access_token: accessToken,
+                    refresh_token: refreshToken
+                });
+                
+                if (error) {
+                    // Handle specific error types
+                    if (error.message.includes('server_error')) {
+                        throw new Error('Email verification link expired or invalid. Please request a new verification email.');
+                    } else if (error.message.includes('invalid_token')) {
+                        throw new Error('Invalid verification token. Please request a new verification email.');
+                    } else if (error.message.includes('token_expired')) {
+                        throw new Error('Verification link expired. Please request a new verification email.');
+                    } else {
+                        throw error;
+                    }
+                }
+
+                if (data.user) {
+                    console.log('✅ User session established:', data.user.id);
+                    
+                    // Try to update database
+                    try {
+                        await updateEmailVerificationStatus(data.user.id);
+                    } catch (dbError) {
+                        console.warn('Database update failed but verification succeeded:', dbError);
+                    }
+                    
+                    // Show success
+                    if (verificationForm) {
+                        verificationForm.innerHTML = `
+                            <div style="text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem; color: #4CAF50;">✅</div>
+                                <h3 style="color: #4CAF50; margin-bottom: 1rem;">Email Verified Successfully!</h3>
+                                <p style="margin-bottom: 2rem;">Welcome to DieBuddy! Your email has been verified.</p>
+                                <div style="margin-bottom: 2rem; padding: 1rem; background: #f0f8ff; border-radius: 8px;">
+                                    <small style="color: #666;">
+                                        User ID: ${data.user.id}<br>
+                                        Email: ${data.user.email}<br>
+                                        Confirmed: ${data.user.email_confirmed_at ? 'Yes' : 'No'}
+                                    </small>
+                                </div>
+                                <button onclick="goToDieBuddyApp()" style="background: #b22222; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-right: 1rem;">Launch DieBuddy App</button>
+                                <button onclick="window.location.href='../index.html'" style="background: #6c757d; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Back to Home</button>
+                            </div>
+                        `;
+                    }
+                    
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                } else {
+                    throw new Error('No user data received from Supabase');
+                }
+
+            } catch (error) {
+                console.error('❌ Verification failed:', error);
+                showVerificationError('verification_failed', error.message);
+            }
+        }
+
+        function showVerificationError(errorCode, errorDescription) {
+            const verificationForm = document.querySelector('.verification-form');
+            if (verificationForm) {
+                verificationForm.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem; color: #f44336;">❌</div>
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Verification Error</h3>
+                        <p style="margin-bottom: 1rem;"><strong>Error:</strong> ${errorCode}</p>
+                        ${errorDescription ? `<p style="margin-bottom: 2rem; color: #666;">${errorDescription}</p>` : ''}
+                        <button onclick="resendDieBuddyVerification()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; margin-right: 1rem;">Resend Verification Email</button>
+                        <button onclick="window.location.href='contact.html'" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">Contact Support</button>
+                    </div>
+                `;
+            }
+        }
+
+        function showManualVerificationForm() {
+            const verificationForm = document.querySelector('.verification-form');
+            if (verificationForm) {
+                verificationForm.innerHTML = `
+                    <h3 style="margin-bottom: 1.5rem;">Complete Email Verification</h3>
+                    <p style="margin-bottom: 2rem; color: #666;">Your verification is almost complete!</p>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <button onclick="resendDieBuddyVerification()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 1rem;">📧 Get New Verification Email</button>
+                        <button onclick="goToDieBuddyApp()" style="background: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 1rem;">🚀 Try Opening DieBuddy App</button>
+                        <button onclick="forceManualVerification()" style="background: #ffc107; color: #000; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; width: 100%;">⚡ Manual Verification (If App Works)</button>
+                    </div>
+
+                    <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 15px;">
+                        <h4 style="color: #b22222; margin-bottom: 1rem;">📋 Troubleshooting:</h4>
+                        <ul style="text-align: left; color: #666;">
+                            <li>Check your email inbox and spam folder</li>
+                            <li>Make sure you clicked the verification link</li>
+                            <li>Try opening the app and signing in</li>
+                            <li>If the app works, use "Manual Verification"</li>
+                            <li>Contact support if issues persist</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        async function updateEmailVerificationStatus(userId) {
+            try {
+                if (!supabaseWeb) {
+                    console.warn('Supabase not available for database update');
+                    return;
+                }
+                
+                const { error } = await supabaseWeb
+                    .from('players')
+                    .update({ email_verified: true })
+                    .eq('user_id', userId);
+
+                if (error) {
+                    console.error('Database update error:', error);
+                } else {
+                    console.log('✅ Database updated successfully');
+                }
+            } catch (error) {
+                console.error('Database update failed:', error);
+            }
+        }
+
+        async function resendDieBuddyVerification() {
+            const email = localStorage.getItem('verification_email') || 
+                          prompt('Please enter your email address to resend verification:');
+            
+            if (!email) {
+                alert('Email address is required');
+                return;
+            }
+
+            try {
+                const verificationForm = document.querySelector('.verification-form');
+                if (verificationForm) {
+                    verificationForm.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+                            <h3>Sending Verification Email...</h3>
+                            <p>Please wait while we send your verification email.</p>
+                        </div>
+                    `;
+                }
+
+                if (!supabaseWeb) {
+                    throw new Error('Supabase not configured');
+                }
+
+                const { error } = await supabaseWeb.auth.resend({
+                    type: 'signup',
+                    email: email,
+                    options: {
+                        emailRedirectTo: `${window.location.origin}/pages/verification.html`
+                    }
+                });
+
+                if (error) throw error;
+
+                localStorage.setItem('verification_email', email);
+                
+                if (verificationForm) {
+                    verificationForm.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem; color: #4CAF50;">📧</div>
+                            <h3 style="color: #4CAF50;">Verification Email Sent!</h3>
+                            <p style="margin-bottom: 2rem;">Check your email inbox and spam folder for the verification link.</p>
+                            <button onclick="showManualVerificationForm()" style="background: #b22222; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer;">Back to Options</button>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('Resend failed:', error);
+                alert('Failed to send verification email: ' + error.message);
+                showManualVerificationForm();
+            }
+        }
+
+        async function forceManualVerification() {
+            const email = prompt('Enter your email address to mark as verified:');
+            if (!email) return;
+
+            const verificationForm = document.querySelector('.verification-form');
+            if (verificationForm) {
+                verificationForm.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem; color: #4CAF50;">✅</div>
+                        <h3 style="color: #4CAF50;">Manual Verification Complete!</h3>
+                        <p style="margin-bottom: 2rem;">Your account should now work in the DieBuddy app.</p>
+                        <button onclick="goToDieBuddyApp()" style="background: #b22222; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;">Launch DieBuddy App</button>
+                    </div>
+                `;
+            }
+        }
+
+        function goToDieBuddyApp() {
+            alert('🎲 Great! Please open the DieBuddy app on your device and sign in with your verified email address. Your account should now be ready to use!');
+        }
+
+        // =====================================
+        // INITIALIZATION
+        // =====================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DieBuddy verification page loaded - initializing...');
+            
+            // Check for email verification tokens immediately
+            checkForEmailVerificationToken();
+            
+            // Set up legacy verification form if it exists
+            const verificationForm = document.getElementById('verificationForm');
+            if (verificationForm) {
+                verificationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Please use the verification link sent to your email instead of entering a code.');
+                });
+            }
+
+            // Add fallback styles if external CSS doesn't load
+            if (!document.querySelector('link[href*="main.css"]')) {
+                const style = document.createElement('style');
+                style.textContent = `
+                    body { 
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        margin: 0; padding: 0; min-height: 100vh; color: #333;
+                    }
+                    .container { 
+                        max-width: 1200px; margin: 0 auto; 
+                        background: rgba(255, 255, 255, 0.95); 
+                        padding: 3rem; border-radius: 20px; 
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                    }
+                    .verification-container { max-width: 600px; margin: 0 auto; text-align: center; }
+                    .verification-icon { font-size: 4rem; color: #28a745; margin-bottom: 2rem; }
+                    .verification-form { 
+                        background: white; padding: 2rem; border-radius: 15px; 
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 2rem; 
+                    }
+                    .form-group { margin-bottom: 1.5rem; }
+                    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+                    .form-group input { 
+                        width: 100%; padding: 1rem; border: 2px solid #e1e5e9; 
+                        border-radius: 10px; font-size: 1rem; 
+                    }
+                    .submit-btn { 
+                        background: #b22222; color: white; padding: 1rem 2rem; 
+                        border: none; border-radius: 10px; font-size: 1rem; 
+                        font-weight: 600; cursor: pointer; width: 100%; 
+                    }
+                    nav { 
+                        background: rgba(51, 51, 51, 0.95); color: white; 
+                        padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; 
+                    }
+                    .nav-container { 
+                        max-width: 1200px; margin: 0 auto; padding: 0 2rem; 
+                        display: flex; justify-content: space-between; align-items: center; 
+                    }
+                    .logo { font-size: 1.8rem; font-weight: bold; color: #b22222; }
+                    .nav-links { display: flex; gap: 2rem; }
+                    .nav-links a { color: white; text-decoration: none; font-weight: 500; }
+                    .footer { 
+                        background: rgba(51, 51, 51, 0.95); color: white; 
+                        text-align: center; padding: 2rem; margin-top: 4rem; 
+                    }
+                    @media (max-width: 768px) {
+                        .container { padding: 2rem; margin: 0 1rem; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            console.log('✅ DieBuddy verification page initialization complete');
+        });
+
+        // Make functions globally accessible
+        window.checkForEmailVerificationToken = checkForEmailVerificationToken;
+        window.goToDieBuddyApp = goToDieBuddyApp;
+        window.showManualVerificationForm = showManualVerificationForm;
+        window.resendDieBuddyVerification = resendDieBuddyVerification;
+        window.forceManualVerification = forceManualVerification;
+
+        console.log('✅ DieBuddy verification system ready');
+    </script>
+</body>
+</html>
