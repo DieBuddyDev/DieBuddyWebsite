@@ -18,7 +18,7 @@
     <link rel="icon" type="image/png" href="assets/images/logo/favicon.png">
 </head>
 <body>
-    <!-- Static Navigation (FIXED - no more dynamic loading) -->
+    <!-- Static Navigation -->
     <nav>
         <div class="nav-container">
             <div class="logo">DieBuddy</div>
@@ -40,19 +40,19 @@
     <!-- Main Content -->
     <main class="page active">
         <div class="container">
-            <!-- Hero Section -->
+            <!-- Hero Section with Fixed Logo -->
             <div class="hero">
-                <img src="assets/images/logo/AppIconBgRemoved.png" alt="DieBuddy Logo" class="hero-logo" style="width: 120px; height: auto; margin-bottom: 2rem;">
+                <img src="assets/images/logo/AppIconBgRemoved.png" alt="DieBuddy Logo" class="hero-logo">
                 <h1>DieBuddy</h1>
                 <p>The ultimate companion app for tracking your die game statistics, organizing groups, and competing with friends.</p>
                 <a href="https://gofund.me/655b9f14" class="cta-button" target="_blank">Support Our Project</a>
             </div>
 
-            <!-- App Preview Section -->
+            <!-- App Preview Section with Properly Sized Screenshots -->
             <div class="app-preview">
                 <div>
                     <h2>Track Every Game</h2>
-                    <p>DieBuddy revolutionizes how you track and analyze your die game performance. Whether you're playing Yahtzee, Farkle, or any custom dice game, our intelligent tracking system captures every detail.</p>
+                    <p>DieBuddy revolutionizes how you track and analyze your die game performance. Whether you're playing beer die, Yahtzee, or any custom dice game, our intelligent tracking system captures every detail.</p>
                     <ul style="text-align: left; margin: 2rem 0;">
                         <li>📊 Comprehensive statistics and analytics</li>
                         <li>🎯 Pattern recognition and insights</li>
@@ -71,7 +71,7 @@
                         <img src="assets/images/screenshots/Game Logs.png" alt="Game Logs" class="app-screenshot">
                     </div>
                     <div class="phone-mockup">
-                        <img src="assets/images/screenshots/gruopOverview.png" alt="Groups Feature" class="app-screenshot">
+                        <img src="assets/images/screenshots/groupOverview.png" alt="Group Overview" class="app-screenshot">
                     </div>
                 </div>
             </div>
@@ -106,6 +106,38 @@
                         <a href="pages/features.html" class="secondary-button" style="margin-right: 1rem;">Learn More</a>
                         <a href="pages/contact.html" class="cta-button">Get Notified</a>
                     </div>
+                </div>
+            </section>
+
+            <!-- Additional Screenshots Showcase -->
+            <section class="screenshots-showcase">
+                <h2 style="text-align: center; color: #b22222; margin-bottom: 3rem;">See DieBuddy in Action</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="phone-mockup">
+                        <img src="assets/images/screenshots/GameScreen.png" alt="Game Screen" class="app-screenshot">
+                        <p>Live Game Tracking</p>
+                    </div>
+                    
+                    <div class="phone-mockup">
+                        <img src="assets/images/screenshots/ProfileScreen.png" alt="Profile Screen" class="app-screenshot">
+                        <p>Your Profile</p>
+                    </div>
+                    
+                    <div class="phone-mockup">
+                        <img src="assets/images/screenshots/GroupMembers.png" alt="Group Members" class="app-screenshot">
+                        <p>Group Management</p>
+                    </div>
+                    
+                    <div class="phone-mockup">
+                        <img src="assets/images/screenshots/Settings.png" alt="Settings" class="app-screenshot">
+                        <p>Settings & Preferences</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 3rem;">
+                    <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">Experience the full power of DieBuddy's comprehensive tracking system</p>
+                    <a href="pages/features.html" class="cta-button">View All Features</a>
                 </div>
             </section>
 
@@ -201,7 +233,7 @@
         </div>
     </footer>
 
-    <!-- Simplified JavaScript - Remove navigation.js since we're using static nav -->
+    <!-- JavaScript -->
     <script src="assets/js/supabase.js"></script>
     <script src="assets/js/main.js"></script>
     
@@ -226,69 +258,51 @@
                     }
                 });
             }
-        });
 
-        // Newsletter form handling
-        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = e.target.querySelector('input[type="email"]').value;
-            const button = e.target.querySelector('button');
-            const originalText = button.textContent;
-            
-            // Show loading state
-            button.innerHTML = '<span class="spinner"></span>Subscribing...';
-            button.disabled = true;
-            
-            // Simulate API call
-            setTimeout(() => {
-                alert(`Thanks! We'll notify ${email} when DieBuddy launches!`);
-                e.target.reset();
-                button.textContent = originalText;
-                button.disabled = false;
-            }, 2000);
-        });
-
-        // Image fallback handling
-        document.addEventListener('DOMContentLoaded', function() {
-            // Style phone mockups with placeholder if images don't exist
+            // Handle screenshot loading with proper sizing and fallbacks
             const screenshots = document.querySelectorAll('.app-screenshot');
             screenshots.forEach((img, index) => {
+                img.onload = function() {
+                    this.classList.add('loaded');
+                    console.log('Screenshot loaded successfully:', this.src);
+                };
+                
                 img.onerror = function() {
+                    console.log('Failed to load screenshot:', this.src);
                     this.style.display = 'none';
+                    
                     const placeholder = document.createElement('div');
                     placeholder.className = 'screenshot-placeholder';
-                    placeholder.style.cssText = `
-                        width: 250px;
-                        height: 500px;
-                        background: linear-gradient(135deg, #667eea, #764ba2);
-                        border-radius: 25px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: white;
-                        font-size: 1.2rem;
-                        text-align: center;
-                        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-                        margin: 0 auto;
-                    `;
-                    const labels = ['Home Screen', 'Game Logs', 'Groups'];
+                    
+                    const labels = [
+                        'Home Screen', 'Game Logs', 'Group Overview', 'Game Screen', 
+                        'Profile', 'Group Members', 'Settings'
+                    ];
+                    
                     placeholder.innerHTML = `
                         <div>
                             <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
-                            <div>${labels[index]} Preview</div>
-                            <div style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">Coming Soon</div>
+                            <div>${labels[index] || 'Screenshot'}</div>
+                            <div style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.8;">Coming Soon</div>
                         </div>
                     `;
+                    
                     this.parentNode.appendChild(placeholder);
                 };
             });
 
-            // Style hero logo placeholder if image doesn't exist
+            // Handle hero logo with dark background
             const heroLogo = document.querySelector('.hero-logo');
             if (heroLogo) {
+                heroLogo.onload = function() {
+                    this.classList.add('loaded');
+                    console.log('Hero logo loaded successfully:', this.src);
+                };
+                
                 heroLogo.onerror = function() {
+                    console.log('Failed to load hero logo:', this.src);
                     this.style.display = 'none';
+                    
                     const logoPlaceholder = document.createElement('div');
                     logoPlaceholder.style.cssText = `
                         width: 120px;
@@ -303,36 +317,74 @@
                         font-size: 3rem;
                         font-weight: bold;
                         box-shadow: 0 10px 30px rgba(178, 34, 34, 0.3);
+                        padding: 15px;
+                        background-color: #2c3e50;
                     `;
                     logoPlaceholder.textContent = '🎲';
                     this.parentNode.insertBefore(logoPlaceholder, this.nextSibling);
                 };
             }
 
-            // Style feature icons placeholders if images don't exist
+            // Handle feature icons
             const featureIcons = document.querySelectorAll('.feature-icon');
             featureIcons.forEach((img, index) => {
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    const iconPlaceholder = document.createElement('div');
-                    iconPlaceholder.className = 'feature-icon';
-                    iconPlaceholder.style.cssText = `
-                        width: 64px;
-                        height: 64px;
-                        background: linear-gradient(45deg, #b22222, #dc143c);
-                        border-radius: 15px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        margin: 0 auto 1.5rem;
-                        color: white;
-                        font-size: 2rem;
-                    `;
-                    const icons = ['🎯', '📊', '👥'];
-                    iconPlaceholder.textContent = icons[index];
-                    this.parentNode.insertBefore(iconPlaceholder, this.nextSibling);
-                };
+                if (img.tagName === 'IMG') {
+                    img.onload = function() {
+                        console.log('Feature icon loaded:', this.src);
+                    };
+                    
+                    img.onerror = function() {
+                        console.log('Failed to load feature icon:', this.src);
+                        this.style.display = 'none';
+                        const iconPlaceholder = document.createElement('div');
+                        iconPlaceholder.className = 'feature-icon';
+                        iconPlaceholder.style.cssText = `
+                            width: 64px;
+                            height: 64px;
+                            background: linear-gradient(45deg, #b22222, #dc143c);
+                            border-radius: 15px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin: 0 auto 1.5rem;
+                            color: white;
+                            font-size: 2rem;
+                        `;
+                        const icons = ['🎯', '📊', '👥'];
+                        iconPlaceholder.textContent = icons[index];
+                        this.parentNode.insertBefore(iconPlaceholder, this.nextSibling);
+                    };
+                }
             });
+
+            // Add fade-in animation to elements
+            const animatedElements = document.querySelectorAll('.feature-card, .phone-mockup');
+            animatedElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('fade-in');
+                }, index * 100);
+            });
+        });
+
+        // Newsletter form handling
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = e.target.querySelector('input[type="email"]').value;
+            const button = e.target.querySelector('button');
+            const originalText = button.textContent;
+            
+            // Show loading state
+            button.innerHTML = '<span class="loading"></span>Subscribing...';
+            button.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert(`Thanks! We'll notify ${email} when DieBuddy launches!`);
+                e.target.reset();
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 2000);
         });
     </script>
 </body>
