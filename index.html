@@ -18,8 +18,24 @@
     <link rel="icon" type="image/png" href="assets/images/logo/favicon.png">
 </head>
 <body>
-    <!-- Navigation (loaded dynamically) -->
-    <nav id="navbar"></nav>
+    <!-- Static Navigation (FIXED - no more dynamic loading) -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">DieBuddy</div>
+            <div class="nav-links">
+                <a href="index.html" style="color: #b22222;">Home</a>
+                <a href="pages/features.html">Features</a>
+                <a href="pages/contact.html">Contact</a>
+                <a href="pages/privacy.html">Privacy Policy</a>
+            </div>
+            <!-- Mobile menu toggle -->
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
     
     <!-- Main Content -->
     <main class="page active">
@@ -171,7 +187,7 @@
                 <div>
                     <h4 style="color: #b22222; margin-bottom: 1rem;">Connect</h4>
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <a href="info@diebuddy.com">📧 Email Support</a>
+                        <a href="mailto:info@diebuddy.com">📧 Email Support</a>
                         <a href="#" onclick="alert('Discord coming soon!')">💬 Join Discord</a>
                         <a href="#" onclick="alert('Twitter coming soon!')">🐦 Follow Updates</a>
                     </div>
@@ -185,13 +201,33 @@
         </div>
     </footer>
 
-    <!-- External JavaScript Files -->
-    <script src="assets/js/navigation.js"></script>
+    <!-- Simplified JavaScript - Remove navigation.js since we're using static nav -->
     <script src="assets/js/supabase.js"></script>
     <script src="assets/js/main.js"></script>
     
     <!-- Page-specific JavaScript -->
     <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    mobileToggle.classList.toggle('active');
+                });
+
+                // Close mobile menu when clicking a link
+                navLinks.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'A') {
+                        navLinks.classList.remove('active');
+                        mobileToggle.classList.remove('active');
+                    }
+                });
+            }
+        });
+
         // Newsletter form handling
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -213,7 +249,7 @@
             }, 2000);
         });
 
-        // Add CSS for the hero logo and phone mockups if images aren't available yet
+        // Image fallback handling
         document.addEventListener('DOMContentLoaded', function() {
             // Style phone mockups with placeholder if images don't exist
             const screenshots = document.querySelectorAll('.app-screenshot');
@@ -236,7 +272,7 @@
                         box-shadow: 0 20px 40px rgba(0,0,0,0.3);
                         margin: 0 auto;
                     `;
-                    const labels = ['Home Screen', 'Statistics', 'Groups'];
+                    const labels = ['Home Screen', 'Game Logs', 'Groups'];
                     placeholder.innerHTML = `
                         <div>
                             <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
