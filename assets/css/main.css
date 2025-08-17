@@ -1,6 +1,16 @@
 /* =====================================
    CORE STYLES - Extracted from your current website
    ===================================== */
+/* Define your custom font - ADD THIS SECTION AT THE VERY TOP */
+@font-face {
+    font-family: 'DieBuddyCustom'; /* You can change this name */
+    src: url('../fonts/AcademyFilled3D.woff2') format('woff2'),
+         url('../fonts/AcademyFilled3D.woff') format('woff'),
+         url('../fonts/AcademyFilled3D.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
 * {
     margin: 0;
@@ -48,6 +58,7 @@ body {
     font-weight: bold;
     color: #b22222;
     margin-bottom: 1rem;
+    font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -64,6 +75,7 @@ h2 {
     margin-bottom: 2rem;
     font-size: 2.5rem;
     text-align: center;
+    font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
 }
 
 h3 {
