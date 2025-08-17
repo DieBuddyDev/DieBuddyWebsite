@@ -62,14 +62,11 @@ body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
-.hero p {
-    font-size: 1.3rem;
-    color: #666;
-    max-width: 600px;
-    margin: 0 auto 2rem;
+h1 {
+    font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
+    letter-spacing: 1px;
 }
 
-/* Typography */
 h2 {
     color: #b22222;
     margin-bottom: 2rem;
@@ -78,6 +75,14 @@ h2 {
     font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
 }
 
+.hero p {
+    font-size: 1.3rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+/* Typography */
 h3 {
     color: #b22222;
     margin-bottom: 1rem;
