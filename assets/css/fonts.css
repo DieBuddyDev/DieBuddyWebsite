@@ -4,9 +4,9 @@
 
 @font-face {
     font-family: 'DieBuddyFont'; /* Your custom name */
-    src: url('../fonts/YourFontName.woff2') format('woff2'),
-         url('../fonts/YourFontName.woff') format('woff'),
-         url('../fonts/YourFontName.ttf') format('truetype');
+    src: url('../fonts/Academy.woff2') format('woff2'),
+         url('../fonts/Academy.woff') format('woff'),
+         url('../fonts/Academy.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap; /* Better loading performance */
@@ -15,9 +15,9 @@
 /* If you have bold/italic variations */
 @font-face {
     font-family: 'DieBuddyFont';
-    src: url('../fonts/YourFontName-Bold.woff2') format('woff2'),
-         url('../fonts/YourFontName-Bold.woff') format('woff'),
-         url('../fonts/YourFontName-Bold.ttf') format('truetype');
+    src: url('../fonts/AcademyFilled3D.woff2') format('woff2'),
+         url('../fonts/AcademyFilled3D.woff') format('woff'),
+         url('../fonts/AcademyFilled3D.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
