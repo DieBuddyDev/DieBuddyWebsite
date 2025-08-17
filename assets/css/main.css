@@ -153,3 +153,25 @@ section {
 .footer a:hover {
     text-decoration: underline;
 }
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+        letter-spacing: 1px;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .logo {
+        font-size: 1.3rem;
+    }
+}
