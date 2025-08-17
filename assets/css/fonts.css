@@ -1,31 +1,20 @@
 /* =====================================
-   CUSTOM DIEBUDDY FONT DEFINITIONS
+   FONT FIX - Update your assets/css/fonts.css with this EXACT code:
    ===================================== */
 
 @font-face {
-    font-family: 'DieBuddyFont'; /* Your custom name */
-    src: url('../fonts/Academy.woff2') format('woff2'),
-         url('../fonts/Academy.woff') format('woff'),
-         url('../fonts/Academy.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap; /* Better loading performance */
-}
-
-/* If you have bold/italic variations */
-@font-face {
-    font-family: 'DieBuddyFont';
+    font-family: 'DieBuddyCustom';
     src: url('../fonts/AcademyFilled3D.woff2') format('woff2'),
          url('../fonts/AcademyFilled3D.woff') format('woff'),
          url('../fonts/AcademyFilled3D.ttf') format('truetype');
-    font-weight: bold;
+    font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 
 /* Apply your custom font to DieBuddy titles */
 .logo {
-    font-family: 'DieBuddyFont', 'Orbitron', sans-serif; /* Fallback fonts */
+    font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
     font-size: 1.8rem;
     font-weight: bold;
     color: #b22222;
@@ -34,23 +23,25 @@
 }
 
 .hero h1 {
-    font-family: 'DieBuddyFont', 'Orbitron', sans-serif; /* Fallback fonts */
+    font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
     font-size: 3.5rem;
     font-weight: bold;
     color: #b22222;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     letter-spacing: 2px;
-    text-transform: uppercase;
 }
 
-/* Apply to all H1 headers */
 h1 {
-    font-family: 'DieBuddyFont', 'Orbitron', sans-serif;
+    font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
     letter-spacing: 1px;
 }
 
-/* Optional: Apply to other headings */
-h2, h3 {
-    font-family: 'DieBuddyFont', 'Orbitron', sans-serif;
+h2 {
+    font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
+    color: #b22222;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    text-align: center;
 }
+
