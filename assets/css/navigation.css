@@ -30,6 +30,16 @@ nav {
     font-family: 'DieBuddyCustom', 'Orbitron', sans-serif;
     letter-spacing: 1px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    background: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(178, 34, 34, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(178, 34, 34, 0.3);
 }
 
 .nav-links {
@@ -88,5 +98,6 @@ nav {
 
     .logo {
         font-size: 1.5rem;
+        padding: 0.4rem 1.2rem;
     }
 }
