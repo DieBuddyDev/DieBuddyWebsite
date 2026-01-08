@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f5f5f5;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; max-width: 600px;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #b22222, #dc143c); padding: 40px 20px; text-align: center;">
+                            <h1 style="color: #ffffff; font-size: 2.5rem; margin: 0 0 10px 0; font-weight: bold;">🎲 DieBuddy</h1>
+                            <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 14px;">Your Game Stats Companion</p>
+                        </td>
+                    </tr>
+
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <div style="text-align: center; font-size: 4rem; margin-bottom: 20px;">🎉</div>
+                            <h2 style="color: #b22222; font-size: 24px; margin: 0 0 20px 0; text-align: center;">Welcome to DieBuddy!</h2>
+
+                            <p style="font-size: 16px; line-height: 1.6; color: #666666; margin-bottom: 20px;">Hi there,</p>
+
+                            <p style="font-size: 16px; line-height: 1.6; color: #666666; margin-bottom: 20px;">
+                                Thanks for signing up for DieBuddy! We're excited to have you join our community of gamers tracking their stats and improving their skills.
+                            </p>
+
+                            <p style="font-size: 16px; line-height: 1.6; color: #666666; margin-bottom: 20px;">
+                                To get started, please verify your email address by clicking the button below:
+                            </p>
+
+                            <!-- Verify Button -->
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td align="center" style="padding: 35px 0;">
+                                        <a href="{{ .ConfirmationURL }}"
+                                           style="display: inline-block; padding: 16px 40px; background: linear-gradient(45deg, #b22222, #dc143c); color: #ffffff; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(178, 34, 34, 0.3);">
+                                            Verify My Email
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Info Box -->
+                            <div style="background-color: #f0f8ff; border-left: 4px solid #b22222; padding: 20px; margin: 25px 0; border-radius: 5px;">
+                                <p style="margin: 0; font-size: 14px; color: #666666;">
+                                    <strong>⏰ Quick Action Required:</strong> This verification link will expire in 24 hours. Please verify your email soon to start using DieBuddy!
+                                </p>
+                            </div>
+
+                            <!-- What's Next Section -->
+                            <div style="background-color: #f9f9f9; padding: 25px; border-radius: 10px; margin: 25px 0;">
+                                <h3 style="color: #b22222; margin: 0 0 15px 0; font-size: 18px;">🚀 What's Next?</h3>
+                                <p style="margin: 0 0 10px 0; font-size: 14px; color: #666666;">Once your email is verified, you can:</p>
+                                <ul style="margin: 0; padding-left: 20px; color: #666666; font-size: 14px; line-height: 1.8;">
+                                    <li>📊 Track your game statistics in real-time</li>
+                                    <li>👥 Create and join gaming groups</li>
+                                    <li>🏆 Compete with friends on leaderboards</li>
+                                    <li>📈 Analyze your performance with detailed insights</li>
+                                </ul>
+                            </div>
+
+                            <div style="height: 1px; background-color: #e0e0e0; margin: 30px 0;"></div>
+
+                            <!-- Alternative Instructions -->
+                            <p style="font-size: 14px; color: #999999; margin-bottom: 10px;">
+                                <strong>Button not working?</strong> Copy and paste this link into your browser:
+                            </p>
+                            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; word-break: break-all; font-family: monospace; font-size: 12px; color: #666666; margin: 20px 0;">
+                                {{ .ConfirmationURL }}
+                            </div>
+
+                            <p style="font-size: 13px; color: #999999; margin-top: 20px;">
+                                If you didn't create a DieBuddy account, you can safely ignore this email or contact our support team at
+                                <a href="https://diebuddy.com/pages/contact.html" style="color: #b22222;">diebuddy.com/pages/contact.html</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #2c3e50; color: #ffffff; padding: 30px; text-align: center;">
+                            <p style="margin: 0 0 10px 0; color: #ffffff; font-size: 14px;">
+                                <strong>DieBuddy</strong><br>
+                                Track your games, improve your skills, have more fun!
+                            </p>
+
+                            <div style="margin: 20px 0 15px 0;">
+                                <a href="https://diebuddy.com" style="color: #b22222; text-decoration: none; margin: 0 10px; font-weight: bold;">Home</a>
+                                <a href="https://diebuddy.com/pages/features.html" style="color: #b22222; text-decoration: none; margin: 0 10px; font-weight: bold;">Features</a>
+                                <a href="https://diebuddy.com/pages/contact.html" style="color: #b22222; text-decoration: none; margin: 0 10px; font-weight: bold;">Support</a>
+                                <a href="https://diebuddy.com/pages/privacy.html" style="color: #b22222; text-decoration: none; margin: 0 10px; font-weight: bold;">Privacy</a>
+                            </div>
+
+                            <p style="font-size: 12px; color: rgba(255,255,255,0.7); margin: 15px 0 0 0;">
+                                &copy; 2025 DieBuddy. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

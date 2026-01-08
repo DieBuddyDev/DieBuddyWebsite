@@ -4,7 +4,9 @@ This directory contains email templates for DieBuddy's authentication system.
 
 ## Files
 
-### 1. `reset-password-supabase-template.html`
+### Password Reset Templates
+
+#### 1. `reset-password-supabase-template.html` ⭐
 **Use this for Supabase Email Templates**
 
 This is the main template optimized for Supabase's email system. It uses table-based layout for maximum email client compatibility.
@@ -12,7 +14,7 @@ This is the main template optimized for Supabase's email system. It uses table-b
 **Supabase Variables:**
 - `{{ .ConfirmationURL }}` - The full reset password URL with tokens
 
-### 2. `reset-password-email.html`
+#### 2. `reset-password-email.html`
 A modern, responsive version with advanced CSS. Use this if you're sending emails through a custom email service.
 
 **Variables:**
@@ -20,16 +22,34 @@ A modern, responsive version with advanced CSS. Use this if you're sending email
 - `{{ .ClientIP }}` - User's IP address (optional)
 - `{{ .Timestamp }}` - Request timestamp (optional)
 
-### 3. `reset-password-text.txt`
+#### 3. `reset-password-text.txt`
 Plain text version for email clients that don't support HTML.
+
+### Signup Confirmation Templates
+
+#### 4. `confirm-signup-supabase-template.html` ⭐
+**Use this for Supabase Email Templates**
+
+Welcome email template for new user signups. Includes features list and verification button.
+
+**Supabase Variables:**
+- `{{ .ConfirmationURL }}` - The full email verification URL with tokens
+
+#### 5. `confirm-signup-email.html`
+Modern responsive version for custom email services.
+
+#### 6. `confirm-signup-text.txt`
+Plain text version for signup confirmation.
 
 ## How to Use with Supabase
 
-### Step 1: Copy the Template
+### For Password Reset
+
+#### Step 1: Copy the Template
 1. Open `reset-password-supabase-template.html`
 2. Copy the entire contents
 
-### Step 2: Configure in Supabase Dashboard
+#### Step 2: Configure in Supabase Dashboard
 1. Go to your [Supabase Dashboard](https://supabase.com/dashboard)
 2. Select your project
 3. Navigate to **Authentication** → **Email Templates**
@@ -37,11 +57,33 @@ Plain text version for email clients that don't support HTML.
 5. Paste the HTML template into the editor
 6. Click **Save**
 
-### Step 3: Configure Redirect URL
+#### Step 3: Configure Redirect URL
 1. In the same dashboard, go to **Authentication** → **URL Configuration**
 2. Add your redirect URL:
    ```
    https://diebuddy.com/pages/reset-password.html
+   ```
+3. Click **Save**
+
+### For Signup Confirmation
+
+#### Step 1: Copy the Template
+1. Open `confirm-signup-supabase-template.html`
+2. Copy the entire contents
+
+#### Step 2: Configure in Supabase Dashboard
+1. Go to your [Supabase Dashboard](https://supabase.com/dashboard)
+2. Select your project
+3. Navigate to **Authentication** → **Email Templates**
+4. Select **Confirm Signup** template
+5. Paste the HTML template into the editor
+6. Click **Save**
+
+#### Step 3: Configure Redirect URL
+1. In the same dashboard, go to **Authentication** → **URL Configuration**
+2. Ensure your verification page URL is added:
+   ```
+   https://diebuddy.com/pages/verification.html
    ```
 3. Click **Save**
 

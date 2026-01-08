@@ -1,0 +1,43 @@
+DieBuddy - Welcome! Confirm Your Signup
+================================================================================
+
+Hi there,
+
+Thanks for signing up for DieBuddy! We're excited to have you join our
+community of gamers tracking their stats and improving their skills.
+
+VERIFY YOUR EMAIL
+-----------------
+To get started, please verify your email address by clicking the link below:
+
+{{ .ConfirmationURL }}
+
+This verification link will expire in 24 hours, so please verify soon!
+
+WHAT'S NEXT?
+------------
+Once your email is verified, you can:
+
+* Track your game statistics in real-time
+* Create and join gaming groups
+* Compete with friends on leaderboards
+* Analyze your performance with detailed insights
+
+NEED HELP?
+----------
+If you're having trouble with the link above, copy and paste it into your
+web browser's address bar.
+
+If you didn't create a DieBuddy account, you can safely ignore this email.
+
+For support, visit: https://diebuddy.com/pages/contact.html
+
+================================================================================
+DieBuddy - Track your games, improve your skills, have more fun!
+
+Home: https://diebuddy.com
+Features: https://diebuddy.com/pages/features.html
+Support: https://diebuddy.com/pages/contact.html
+Privacy Policy: https://diebuddy.com/pages/privacy.html
+
+© 2025 DieBuddy. All rights reserved.
