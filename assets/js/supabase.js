@@ -2,19 +2,23 @@
    SUPABASE CONFIGURATION & EMAIL VERIFICATION - From your current website
    ===================================== */
 
-// TODO: Update these with your actual Supabase credentials
-const SUPABASE_URL = 'https://YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://kamqpgsrxhxuxsvccrra.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthbXFwZ3NyeGh4dXhzdmNjcnJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMzM0NTAsImV4cCI6MjA1OTgwOTQ1MH0.rT44_bJTOnOz_pdrOT7o7X_Y3fEPhiB1jzjmLetGYyc';
 
-// Initialize Supabase client (only if Supabase script is loaded)
+// Initialize Supabase client immediately (the CDN script tag loads before this file)
 let supabaseClient = null;
 
+if (typeof supabase !== 'undefined') {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('Supabase initialized successfully');
+} else {
+    console.warn('Supabase library not loaded');
+}
+
 function initializeSupabase() {
-    if (typeof supabase !== 'undefined') {
+    if (!supabaseClient && typeof supabase !== 'undefined') {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('Supabase initialized successfully');
-    } else {
-        console.warn('Supabase library not loaded');
     }
 }
 
